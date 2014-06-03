@@ -319,16 +319,13 @@ SendTab.prototype.angular = function (module)
           .on('success', function (data) {
             if (data.receive_currencies) {
               $scope.$apply(function () {
-//                send.restrict_currencies = data.receive_currencies;
                 // Generate list of accepted currencies
                 var currencies = _.uniq(_.compact(_.map(data.receive_currencies, function (currency) {
                   return currency;
                 })));
 
-
-
                 // add XRP if it's allowed
-                if (!send.recipient_info.disallow_xrp) {
+                if (!$scope.send.recipient_info.disallow_xrp) {
                   currencies.unshift('XRP');
                 }
 
@@ -347,8 +344,6 @@ SendTab.prototype.angular = function (module)
                 send.currency_choices = currencies;
                 send.currency_code = currencies[0]._iso_code;
                 send.currency = currencies[0];
-
-//                console.log(send.restrict_currencies, send.currency_choices);
               });
             }
           })
