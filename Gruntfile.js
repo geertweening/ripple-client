@@ -22,6 +22,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webfont');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-aws');
+  grunt.loadNpmTasks('grunt-karma');
 
   // Ripple client dependencies
   var deps = ["deps/js/jquery/dist/jquery.js",
@@ -461,7 +462,38 @@ module.exports = function(grunt) {
           }
         ]
       }
-    }  });
+    },
+
+    karma: {
+      unit: {
+        configFile: './test/karma-unit.conf.js',
+        autoWatch: false,
+        singleRun: true
+      }
+//      ,
+//      unit_auto: {
+//        configFile: './test/karma-unit.conf.js'
+//      },
+//      midway: {
+//        configFile: './test/karma-midway.conf.js',
+//        autoWatch: false,
+//        singleRun: true
+//      },
+//      midway_auto: {
+//        configFile: './test/karma-midway.conf.js'
+//      },
+//      e2e: {
+//        configFile: './test/karma-e2e.conf.js',
+//        autoWatch: false,
+//        singleRun: true
+//      },
+//      e2e_auto: {
+//        configFile: './test/karma-e2e.conf.js'
+//      }
+    }
+
+
+  });
 
   // Webpack
   var webpack = {
@@ -572,6 +604,8 @@ module.exports = function(grunt) {
     }
   });
 
+
+
   grunt.config.set('webpack',webpack);
 
   // Tasks
@@ -607,8 +641,6 @@ module.exports = function(grunt) {
   // AWS S3 deployment for downloadable clients
   grunt.registerTask('dldeploy', ['s3']);
 
-  // End-to-end tests
-  grunt.registerTask('e2e', ['connect:debug', 'mochaProtractor:local']);
 
   // Start server with auto-recompilation
   grunt.registerTask('serve', ['connect:debug', 'watch']);
