@@ -43,7 +43,7 @@ SendTab.prototype.angular = function (module)
       // raw address without any parameters
       var address = webutil.stripRippleAddress($scope.send.recipient);
 
-      $scope.contact = webutil.getContact($scope.userBlob.data.contacts,address);
+      $scope.contact = webutil.getContact($scope.userBlob.data.contacts, address);
 
       // Sets
       // send.recipient, send.recipient_name, send.recipient_address, send.dt.
@@ -318,33 +318,7 @@ SendTab.prototype.angular = function (module)
         $network.remote.request_account_currencies(send.recipient_address)
           .on('success', function (data) {
             if (data.receive_currencies) {
-              $scope.$apply(function () {
-                // Generate list of accepted currencies
-                var currencies = _.uniq(_.compact(_.map(data.receive_currencies, function (currency) {
-                  return currency;
-                })));
-
-                // add XRP if it's allowed
-                if (!$scope.send.recipient_info.disallow_xrp) {
-                  currencies.unshift('XRP');
-                }
-
-                // create a currency object for each of the currency codes
-                for (var i=0; i < currencies.length; i++) {
-                  currencies[i] = ripple.Currency.from_json(currencies[i]);
-                }
-
-                // create the display version of the currencies
-                currencies = _.map(currencies, function (currency) {
-                  if ($scope.currencies_all_keyed[currency._iso_code]) {
-                    return currency.to_human({full_name:$scope.currencies_all_keyed[currency._iso_code].name});
-                  }
-                });
-
-                send.currency_choices = currencies;
-                send.currency_code = currencies[0]._iso_code;
-                send.currency = currencies[0];
-              });
+              $scope.update_currency_choices(data.receive_currencies);
             }
           })
           .on('error', function () {})
@@ -365,6 +339,41 @@ SendTab.prototype.angular = function (module)
       }
 
       $scope.update_currency();
+    };
+
+    $scope.update_currency_choices = function(receive_currencies) {
+
+      console.log("receive currencies", receive_currencies);
+
+      $scope.$apply(function () {
+        // Generate list of accepted currencies
+        var currencies = _.uniq(_.compact(_.map(receive_currencies, function (currency) {
+          return currency;
+        })));
+
+        // add XRP if it's allowed
+        if (!$scope.send.recipient_info.disallow_xrp) {
+          currencies.unshift('XRP');
+        }
+
+        // create a currency object for each of the currency codes
+        for (var i=0; i < currencies.length; i++) {
+          currencies[i] = ripple.Currency.from_json(currencies[i]);
+        }
+
+        // create the display version of the currencies
+        currencies = _.map(currencies, function (currency) {
+          if ($scope.currencies_all_keyed[currency._iso_code]) {
+            return currency.to_human({full_name:$scope.currencies_all_keyed[currency._iso_code].name});
+          } else {
+            return currency.to_human();
+          }
+        });
+
+        $scope.send.currency_choices = currencies;
+        $scope.send.currency_code = currencies[0]._iso_code;
+        $scope.send.currency = currencies[0];
+      });
     };
 
     // Reset anything that depends on the currency
@@ -891,11 +900,11 @@ SendTab.prototype.angular = function (module)
       var send = $scope.send;
       var currency = $scope.send.currency.slice(0, 3).toUpperCase();
       var amount = send.amount_feedback;
-      var addrress = $scope.send.recipient_address;
+      var address = $scope.send.recipient_address;
 
       $scope.mode = "sending";
 
-      amount.set_issuer(addrress);
+      amount.set_issuer(address);
 
       var tx = $network.remote.transaction();
       // Source tag
@@ -946,7 +955,7 @@ SendTab.prototype.angular = function (module)
 
         tx.destination_tag(dt ? +dt : undefined); // 'cause +dt is NaN when dt is undefined
 
-        tx.payment($id.account, addrress, amount.to_json());
+        tx.payment($id.account, address, amount.to_json());
       }
 
       if ($scope.send.alt) {

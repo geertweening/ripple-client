@@ -32,7 +32,7 @@ section.col-xs-12.content(ng-controller="ExchangeCtrl")
         .col-sm-4.col-md-3
           input.currency.form-control#amount_currency(
           name='amount_currency', type='text'
-          rp-combobox="currency_query", rp-combobox-select
+          rp-combobox="currency_choices", rp-combobox-select
           ng-model='exchange.currency_name'
           rp-autofill='$routeParams.amount'
           rp-autofill-currency)

@@ -159,7 +159,7 @@ ExchangeTab.prototype.angular = function (module)
           }
         });
 
-        $scope.currency_query = webutil.queryFromArray(currencies);
+        $scope.currency_choices = currencies;
 
       }, true);
 
