@@ -11,6 +11,18 @@ module.exports = function(config) {
       'test/unit/**/*.js'
     ],
 
+    preprocessors: {
+      'build/dist/web/ripple-client-debug.js' : 'coverage'
+    },
+
+    reporters: ['coverage'],
+
+    coverageReporter : {
+      type : 'text',
+      dir : 'coverage/',
+      type : 'lcov'
+    },
+
     browsers: ['Chrome', 'Firefox'],
     singleRun: false,
     autoWatch: true
