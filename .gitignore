@@ -5,6 +5,7 @@ npm-debug.log
 .DS_Store
 node_modules
 build/
+coverage/
 src/js/config.js
 analytics.js
 l10n/templates

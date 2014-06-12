@@ -8,7 +8,9 @@ before_install:
 before_script:
   - "cp src/js/config-example.js src/js/config.js"
   - "cp config-example.json config.json"
-script: "grunt && npm test"
+script: "grunt && npm run test-travis"
+after_success:
+  - npm run coveralls
 notifications:
   email:
     false
