@@ -55,6 +55,7 @@
     "karma-sinon-chai": "~0.1.6",
     "karma-cli": "0.0.4",
     "karma-coverage": "~0.2.4",
-    "istanbul": "~0.2.11"
+    "istanbul": "~0.2.11",
+    "karma-coveralls": "~0.1.4"
   }
 }

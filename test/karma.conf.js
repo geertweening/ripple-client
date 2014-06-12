@@ -15,12 +15,11 @@ module.exports = function(config) {
       'build/dist/web/ripple-client-debug.js' : 'coverage'
     },
 
-    reporters: ['coverage'],
+    reporters: ['coverage', 'coveralls'],
 
     coverageReporter : {
-      type : 'text',
-      dir : 'coverage/',
-      type : 'lcov'
+      type : 'lcov',
+      dir : 'coverage/'
     },
 
     browsers: ['Chrome', 'Firefox'],
